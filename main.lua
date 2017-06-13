@@ -5,20 +5,36 @@ function love.load()
   require "CanvasController"
   
   canvas = CanvasController()
-  pla = PlayerController(700, 500, 200)
-  ene = EnemyController(25, 50, 400)
+  player = PlayerController(200)
+  
+  listOfEnemies = {}
+  for nameCount = 1, 5 do
+    local randomX = love.math.random( 10, love.graphics.getWidth() - 10 )
+    local randomY = love.math.random( -10, -100 )
+    local randomSpeed = love.math.random( 200, 500 )
+    enemy = EnemyController(randomX, randomY, randomSpeed)
+    table.insert(listOfEnemies, enemy)
+    
+  end
+  
 end
 
 function love.update(dt)
-  canvas:update(dt)
-  pla:update(dt)
-  ene:update(dt, canvas)
+  canvas:update(dt, player)
+  player:update(dt)
   
-  pla:checkCollision(ene)
+  for i,e in ipairs(listOfEnemies) do
+        e:update(dt, player)
+        player:checkCollision(e)
+    end
 end
 
 function love.draw()
   canvas:draw()
-  pla:draw()
-  ene:draw()
+  player:draw()
+  
+  
+  for i,e in ipairs(listOfEnemies) do
+        e:draw()
+    end
 end

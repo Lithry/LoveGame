@@ -1,10 +1,13 @@
 PlayerController = Object:extend()
 
-function PlayerController:new(x, y, speed)
-    self.x = x
-    self.y = y
+function PlayerController:new(speed)
+    self.score = 0
     self.width = 50
     self.height = 50
+    
+    self.x = love.graphics.getWidth() / 2 - self.width / 2
+    self.y = love.graphics.getHeight() - 10 - self.height
+    
     self.speed = speed
     self.dead = false
 end
@@ -47,6 +50,12 @@ function PlayerController:checkCollision(obj)
     end
 end
 
+function PlayerController:AddScore()
+  self.score = self.score + 1
+end
+
 function PlayerController:draw()
+  if self.dead == false then
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+  end
 end

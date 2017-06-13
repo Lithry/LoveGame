@@ -8,14 +8,13 @@ function CanvasController:new()
     
     self.width = love.graphics.getWidth() - self.x * 2
     self.height = love.graphics.getHeight() - self.y * 2
-    
-    
 
 end
 
-function CanvasController:update(dt)
+function CanvasController:update(dt, player)
   
-end
+  self.score = player.score
+  end
 
 function CanvasController:draw()
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)

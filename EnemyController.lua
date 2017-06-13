@@ -8,7 +8,7 @@ function EnemyController:new(x, y, speed)
     self.speed = speed
 end
 
-function EnemyController:update(dt, canvas)
+function EnemyController:update(dt, player)
     local window_height = love.graphics.getHeight()
     
     self.y = self.y + self.speed * dt
@@ -18,7 +18,7 @@ function EnemyController:update(dt, canvas)
       self.y = -randomY
       local randomX = love.math.random( 10, love.graphics.getWidth() - 10 )
       self.x = randomX
-      canvas.score = canvas.score + 1
+      player:AddScore()
     end
 end
 
