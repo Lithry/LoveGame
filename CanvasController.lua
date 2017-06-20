@@ -8,16 +8,31 @@ function CanvasController:new()
     
     self.width = love.graphics.getWidth() - self.x * 2
     self.height = love.graphics.getHeight() - self.y * 2
-
+    
+    self.PlayerDead = false
 end
 
-function CanvasController:update(dt, player)
-  
+function CanvasController:update(dt, player, listOfEnemies)
   self.score = player.score
+  self.PlayerDead = player.dead
+  
+  if self.PlayerDead == true then
+      if love.keyboard.isDown('r') then
+        player:Restart()
+        for i,e in ipairs(listOfEnemies) do
+          e:Restart()
+        end
+      end
   end
+end
 
 function CanvasController:draw()
     love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
     
-    love.graphics.print("Score: " .. self.score, self.x + 1, self.y + 1)
+    love.graphics.print("Score: " .. self.score, self.x + 1, self.y + 1, 0, 1, 1)
+    
+    if self.PlayerDead == true then
+      love.graphics.print("Dead", self.width / 2, self.height / 2, 0, 1, 1)
+      love.graphics.print("Pres R to Restart", self.width / 2 - 30, self.height / 2 + 25, 0, 1, 1)
+    end
 end

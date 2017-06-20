@@ -2,8 +2,11 @@ PlayerController = Object:extend()
 
 function PlayerController:new(speed)
     self.score = 0
-    self.width = 50
-    self.height = 50
+    
+    self.image = love.graphics.newImage("Sprites/Ship.png")
+    
+    self.width = self.image:getWidth()
+    self.height = self.image:getHeight()
     
     self.x = love.graphics.getWidth() / 2 - self.width / 2
     self.y = love.graphics.getHeight() - 10 - self.height
@@ -30,15 +33,15 @@ function PlayerController:update(dt)
 end
 
 function PlayerController:checkCollision(obj)
-  local self_left = self.x
-  local self_right = self.x + self.width
-  local self_top = self.y
-  local self_bottom = self.y + self.height
+  local self_left = self.x - self.width/ 2
+  local self_right = self.x + self.width / 2
+  local self_top = self.y - self.height / 2
+  local self_bottom = self.y + self.height / 2
   
-  local obj_left = obj.x
-  local obj_right = obj.x + obj.width
-  local obj_top = obj.y
-  local obj_bottom = obj.y + obj.height
+  local obj_left = obj.x - obj.width / 2
+  local obj_right = obj.x + obj.width / 2
+  local obj_top = obj.y - obj.height / 2
+  local obj_bottom = obj.y + obj.height / 2
   
   if  self_right > obj_left and
       self_left < obj_right and
@@ -51,11 +54,28 @@ function PlayerController:checkCollision(obj)
 end
 
 function PlayerController:AddScore()
-  self.score = self.score + 1
+  if self.dead == false then
+    self.score = self.score + 1
+  end
+end
+
+function PlayerController:Restart()
+  self.score = 0
+    
+  self.x = love.graphics.getWidth() / 2 - self.width / 2
+  self.y = love.graphics.getHeight() - 10 - self.height
+  
+  self.dead = false
 end
 
 function PlayerController:draw()
   if self.dead == false then
-    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    love.graphics.draw(self.image, self.x, self.y, 0, 1, 1, self.width / 2, self.height / 2)
   end
+  
+  --local self_left = self.x - self.width / 2
+  --local self_right = self.x + self.width / 2
+  --local self_top = self.y - self.height / 2
+  --local self_bottom = self.y + self.height / 2
+  --love.graphics.rectangle('line',self_left, self_top,self.width, self.height)
 end
