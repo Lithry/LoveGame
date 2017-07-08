@@ -22,6 +22,8 @@ function CanvasController:update(dt, player, listOfEnemies)
         for i,e in ipairs(listOfEnemies) do
           e:Restart()
         end
+      elseif love.keyboard.isDown('q') then
+        love.event.quit()
       end
   end
 end
@@ -34,5 +36,6 @@ function CanvasController:draw()
     if self.PlayerDead == true then
       love.graphics.print("Dead", self.width / 2, self.height / 2, 0, 1, 1)
       love.graphics.print("Pres R to Restart", self.width / 2 - 30, self.height / 2 + 25, 0, 1, 1)
+      love.graphics.print("Pres Q to Quit", self.width / 2 - 20, self.height / 2 + 50, 0, 1, 1)
     end
 end

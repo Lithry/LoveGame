@@ -3,8 +3,12 @@ function love.load()
   require "PlayerController"
   require "EnemyController"
   require "CanvasController"
-  require "StarsController"
   
+  onGame = false
+  image = love.graphics.newImage("Sprites/Space.jpg")
+  width = image:getWidth()
+  height = image:getHeight()
+
   canvas = CanvasController()
   player = PlayerController(200)
   
@@ -12,46 +16,45 @@ function love.load()
   for nameCount = 1, 5 do
     local randomX = love.math.random( 10, love.graphics.getWidth() - 10 )
     local randomY = love.math.random( -10, -100 )
-    local randomSpeed = love.math.random( 50, 100 )
+    local randomSpeed = love.math.random( 200, 500 )
     enemy = EnemyController(randomX, randomY, randomSpeed)
     table.insert(listOfEnemies, enemy)
-  end
-  
-  listOfStars = {}
-  for nameCount = 1, 100 do
-    local randomX = love.math.random( 10, love.graphics.getWidth() - 10 )
-    local randomY = love.math.random( -10, -100 )
-    local randomSpeed = love.math.random( 50, 100 )
-    stars = StarsController(randomX, randomY, randomSpeed)
-    table.insert(listOfStars, stars)
   end
 end
 
 function love.update(dt)
-
-  player:update(dt)
-  canvas:update(dt, player, listOfEnemies)
+  if onGame == false then
+      if love.keyboard.isDown('n') then
+        onGame = true
+      elseif love.keyboard.isDown('q') then
+        love.event.quit()
+      end
+  elseif onGame == true then
+    player:update(dt)
+    canvas:update(dt, player, listOfEnemies)
   
   
   for i,e in ipairs(listOfEnemies) do
         e:update(dt, player)
         player:checkCollision(e)
     end
-    
-    for i,s in ipairs(listOfStars) do
-        s:update(dt)
-    end
+  end
 end
 
 function love.draw()
-  canvas:draw()
-  player:draw()
+  love.graphics.draw(image, -1, -1)
   
-  for i,e in ipairs(listOfEnemies) do
-        e:draw()
+  if onGame == false then
+      love.graphics.print("New Game (N)", love.graphics.getWidth() / 2 - 50, love.graphics.getHeight() / 2 - 25, 0, 1, 1)
+      love.graphics.print("Quit (Q)", love.graphics.getWidth() / 2 - 30, love.graphics.getHeight() / 2, 0, 1, 1)
+    --Menu
+      
+  elseif onGame == true then
+    canvas:draw()
+    player:draw()
+  
+    for i,e in ipairs(listOfEnemies) do
+      e:draw()
     end
-    
-    for i,s in ipairs(listOfStars) do
-        s:draw()
-    end
+  end
 end
